@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -49,41 +50,39 @@ namespace SQL.Connect
         public int Update(int id, string teacher_name, string teacher_surname, string teacher_gender, string teacher_subject, string teacher_email)
         {
             con.Open();
-            if(string.IsNullOrEmpty(teacher_name)||id<0)
+            if(id<0)
             {
                 return 0;
             }
-            SqlCommand cmd = new SqlCommand("select * from Teacher", con);
+            
+            string quer = "select *  from Teacher where id=" + id;
+            SqlCommand cmd = new SqlCommand(quer, con);
             SqlDataReader ds=cmd.ExecuteReader();
-            if(teacher_surname=="")
+            while (ds.Read())
             {
-                if(ds.Read())
+                if(teacher_name=="")
+                {
+                    teacher_name = ds[1].ToString();
+                }
+                if (teacher_surname == "")
                 {
                     teacher_surname = ds[2].ToString();
                 }
-            }
-            if (teacher_subject == "")
-            {
-                if (ds.Read())
+                if (teacher_subject == "")
                 {
                     teacher_subject = ds[3].ToString();
                 }
-            }
-            if (teacher_gender == "")
-            {
-                if (ds.Read())
+                if (teacher_gender == "")
                 {
                     teacher_gender = ds[4].ToString();
                 }
-            }
-            if (teacher_email == "")
-            {
-                if (ds.Read())
-                {
+                if (teacher_email == "")
+                { 
                     teacher_email = ds[5].ToString();
                 }
             }
             ds.Close();
+            con.Close();
             query = "Update Teacher set teacher_name='"+teacher_name+"',teacher_surname='"+teacher_surname+"',teacher_gender='"+teacher_gender+"',teacher_subject='"+teacher_subject+"',teacher_mail='"+teacher_email+"'where id="+id;
 
             cmd = new SqlCommand(query,con);
