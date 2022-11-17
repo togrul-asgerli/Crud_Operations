@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using SQL.Connect;
+using System.Text.RegularExpressions;
 
 namespace SQL
 {
@@ -61,6 +62,14 @@ namespace SQL
 
         private void btn_update_Click(object sender, EventArgs e)
         {
+            string regex = @"^[0-9]";
+            Regex rg = new Regex(regex);
+
+            if (!rg.IsMatch(txt_id.Text))
+            {
+                MessageBox.Show("Id can't be non numeric", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (txt_id.Text == "")
             {
                 MessageBox.Show("Id cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -84,7 +93,15 @@ namespace SQL
 
         private void btn_delete_Click(object sender, EventArgs e)
         {
-            if(txt_id.Text=="")
+            string regex = @"^[0-9]";
+            Regex rg = new Regex(regex);
+
+            if (!rg.IsMatch(txt_id.Text))
+            {
+                MessageBox.Show("Id can't be non numeric", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (txt_id.Text=="")
             {
                 MessageBox.Show("Id cannot be empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
